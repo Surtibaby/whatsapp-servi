@@ -50,8 +50,17 @@ app.get('/qr', async (req, res) => {
 
 // Ruta para enviar mensajes
 app.post('/send', async (req, res) => {
-    const { number, message } = req.body;
+    const { number, name, orderNumber } = req.body;
     const chatId = number.includes('@c.us') ? number : `${number}@c.us`;
+
+    const message = `
+🛎️ *Confirmación de Pedido*
+
+Hola ${name}, tu pedido *#${orderNumber}* ha sido confirmado con éxito. Estará llegando entre 2 y 3 días hábiles.
+
+----------------------------------------
+📦 Gracias por comprar con nosotros | Surtibaby 💛
+`;
 
     try {
         const response = await client.sendMessage(chatId, message);
@@ -61,6 +70,7 @@ app.post('/send', async (req, res) => {
         res.status(500).json({ success: false, error: error.message });
     }
 });
+
 
 // Ruta base opcional para que no muestre error
 app.get('/', (req, res) => {
